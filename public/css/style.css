@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(to right, #efdaff, #dba8ff);
+    background: linear-gradient(to right, #3b82f6, #2563eb);
     color: #333;
 }
 .container {
@@ -48,7 +48,7 @@ input, select {
 button {
     width: 100%;
     padding: 12px;
-    background: #e8cafd;
+    background: #3b82f6;
     border-radius: 6px;
     border: none;
     cursor: pointer;
@@ -59,7 +59,7 @@ button {
     transition: 0.5s;
 }
 button:hover {
-    background: #dba8ff;
+    background: #2563eb;
 }
 p {
     font-size: 14.5px;
@@ -67,7 +67,7 @@ p {
     margin-bottom: 10px;
 }
 p a {
-    color: #c97dff;
+    color: #1e40af;
     text-decoration: none;
 }
 p a:hover {
