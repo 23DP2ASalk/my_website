@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingController;
 
 // Public routes
 Route::get('/', function () {
@@ -29,9 +31,23 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-// Admin routes (requires authentication + admin role)
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+/**
+ * Admin Routes
+ * 
+ * All routes are protected by 'auth' and 'admin' middleware
+ */
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // User Management
+    Route::resource('users', UserController::class);
+    Route::post('users/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('users.toggle-admin');
+    
+    // Settings
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::post('settings/create', [SettingController::class, 'store'])->name('settings.store');
+    Route::delete('settings/{setting}', [SettingController::class, 'destroy'])->name('settings.destroy');
 });
