@@ -11,6 +11,16 @@
 
       <v-spacer></v-spacer>
 
+      <!-- MY STATISTICS BUTTON - NEW -->
+      <v-btn 
+        href="/statistics" 
+        variant="text"
+        prepend-icon="mdi-chart-line"
+        class="mr-2"
+      >
+        My Statistics
+      </v-btn>
+
       <v-btn icon @click="toggleTheme">
         <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
       </v-btn>
@@ -29,6 +39,12 @@
             <v-list-item-subtitle>{{ userRole }}</v-list-item-subtitle>
           </v-list-item>
           <v-divider></v-divider>
+          <v-list-item href="/statistics">
+            <template v-slot:prepend>
+              <v-icon>mdi-chart-line</v-icon>
+            </template>
+            <v-list-item-title>Manas statistikas</v-list-item-title>
+          </v-list-item>
           <v-list-item @click="logout">
             <template v-slot:prepend>
               <v-icon>mdi-logout</v-icon>
@@ -43,13 +59,18 @@
     <v-navigation-drawer v-model="drawer" temporary>
       <v-list>
         <v-list-item prepend-icon="mdi-home" title="Sākums" @click="scrollTo('home')"></v-list-item>
+        
+        <!-- STATISTICS LINK - NEW -->
+        <v-list-item prepend-icon="mdi-chart-line" title="Manas Statistikas" href="/statistics"></v-list-item>
+        
         <v-list-item prepend-icon="mdi-information" title="Par mums"></v-list-item>
         
         <v-list-group value="Services">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" prepend-icon="mdi-cog" title="Pakalpojumi"></v-list-item>
           </template>
-          <v-list-item prepend-icon="mdi-chart-line" title="Statistikas ievadīšana"></v-list-item>
+          <v-list-item prepend-icon="mdi-chart-line" title="Statistikas ievadīšana" href="/statistics/create"></v-list-item>
+          <v-list-item prepend-icon="mdi-view-list" title="Skatīt statistikas" href="/statistics"></v-list-item>
           <v-list-item prepend-icon="mdi-chart-bar" title="Datu analīze"></v-list-item>
           <v-list-item prepend-icon="mdi-file-document" title="Atskaites"></v-list-item>
           <v-list-item prepend-icon="mdi-download" title="Datu eksports"></v-list-item>
@@ -68,9 +89,21 @@
             <h1 class="text-h3 text-md-h2 font-weight-bold mb-4 gradient-text">
               Universāls Sporta Statistikas Apkopotājs
             </h1>
-            <p class="text-h6 text-medium-emphasis">
+            <p class="text-h6 text-medium-emphasis mb-6">
               Profesionāla platforma spēļu statistikas ievadīšanai, uzglabāšanai un analīzei.
             </p>
+            
+            <!-- START TRACKING BUTTON - NEW -->
+            <v-btn
+              href="/statistics/create"
+              color="primary"
+              size="x-large"
+              elevation="8"
+              class="pulse-animation"
+              prepend-icon="mdi-plus-circle"
+            >
+              Sākt Statistiku Ievadīšanu
+            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -127,7 +160,6 @@
               elevation="4"
               hover
               class="sport-card"
-              @click="openSportDialog(sport)"
             >
               <v-img
                 :src="sport.image"
@@ -144,11 +176,25 @@
                 <p>{{ sport.description }}</p>
               </v-card-text>
 
-              <v-card-actions>
+              <!-- UPDATED BUTTONS - NEW -->
+              <v-card-actions class="pa-4">
                 <v-btn
+                  :href="`/statistics/create?sport=${sport.sportType}`"
                   color="primary"
-                  block
                   variant="flat"
+                  prepend-icon="mdi-plus"
+                  block
+                >
+                  Pievienot {{ sport.title }} Statistiku
+                </v-btn>
+              </v-card-actions>
+              
+              <v-card-actions class="pa-4 pt-0">
+                <v-btn
+                  color="secondary"
+                  variant="outlined"
+                  block
+                  @click="openSportDialog(sport)"
                 >
                   Uzzināt vairāk
                 </v-btn>
@@ -382,8 +428,16 @@
         </v-card-text>
 
         <v-card-actions>
+          <v-btn
+            :href="`/statistics/create?sport=${selectedSport.sportType}`"
+            color="primary"
+            variant="flat"
+            prepend-icon="mdi-plus"
+          >
+            Pievienot Statistiku
+          </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="primary" variant="text" @click="sportDialog = false">
+          <v-btn color="grey" variant="text" @click="sportDialog = false">
             Aizvērt
           </v-btn>
         </v-card-actions>
@@ -421,6 +475,7 @@ const sports = ref([
   {
     id: 1,
     title: 'Basketbols',
+    sportType: 'Basketball',
     icon: '🏀',
     description: 'Ievadiet un analizējiet basketbola spēļu statistiku: punkti, piespēles, atlēkušās bumbas, bloķējumi un vairāk.',
     image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400',
@@ -429,6 +484,7 @@ const sports = ref([
   {
     id: 2,
     title: 'Futbols',
+    sportType: 'Football',
     icon: '⚽',
     description: 'Uzglabājiet futbola spēļu datus: vārti, piespēles, precizitāte, aizsardzības darbības.',
     image: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400',
@@ -437,6 +493,7 @@ const sports = ref([
   {
     id: 3,
     title: 'Volejbols',
+    sportType: 'Volleyball',
     icon: '🏐',
     description: 'Reģistrējiet volejbola statistiku: servēšana, uzbrukumi, bloķi, uzkritieni.',
     image: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=400',
@@ -608,6 +665,23 @@ onMounted(() => {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: slideInDown 0.8s ease-in-out;
+}
+
+/* Pulse Animation for CTA Button */
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
 }
 
 /* Sport Cards Animations */
@@ -783,15 +857,6 @@ onMounted(() => {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
   }
 }
 

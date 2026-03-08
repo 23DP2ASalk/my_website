@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // ← PIEVIENO ŠEIT STATISTICS ROUTES
+    // Statistics CRUD
+    Route::resource('statistics', StatisticController::class);
+    Route::get('statistics-summary', [StatisticController::class, 'summary'])->name('statistics.summary');
 });
 
 /**
