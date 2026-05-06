@@ -1,218 +1,333 @@
-# Stat Track
+# 📊 Stats Tracker - Sporta Statistikas Aplikācija
 
-A web application built with Laravel and Vue.js for tracking statistics.
+Pilna projekta dokumentācija
 
-## Requirements
+---
 
-- PHP 8.1 or higher
-- Composer
-- Node.js 16.x or higher
-- MySQL or PostgreSQL database
+## 📋 Satura rādītājs
 
-## Installation
+1. [Projekta Apraksts](#projekta-apraksts)
+2. [Tehnoloģijas](#tehnoloģijas)
+3. [Funkcionalitāte](#funkcionalitāte)
+4. [Instalācija](#instalācija)
+5. [Lietošana](#lietošana)
+6. [Admin Panel](#admin-panel)
+7. [API Endpoints](#api-endpoints)
+8. [Datubāze](#datubāze)
+9. [Problēmu Risināšana](#problēmu-risināšana)
 
-### 1. Clone the repository
+---
+
+## 🎯 Projekta Apraksts
+
+**Stats Tracker** - moderna web aplikācija sporta statistikas uzskaites un analīzei.
+
+**Atbalsta 3 sporta veidus:**
+- 🏀 Basketbols
+- ⚽ Futbols  
+- 🏐 Volejbols
+
+---
+
+## 💻 Tehnoloģijas
+
+- **Laravel 10** - Backend framework
+- **Vue 3** - Frontend framework
+- **Vuetify 3** - UI komponentes
+- **MySQL** - Datubāze
+- **Vite** - Build tool
+
+---
+
+## ⚡ Funkcionalitāte
+
+### Statistikas Pārvaldība
+- ✅ Pievienot statistiku
+- ✅ Skatīt visas statistikas
+- ✅ Rediģēt statistiku
+- ✅ Dzēst statistiku
+- ✅ Filtrēt pēc sporta/datuma
+
+### Datu Analīze
+- 📊 Vidējie rādītāji
+- 📈 Progresa tendences
+- 🏆 Labākie sniegumi
+- 📉 Grafiki un diagrammas
+
+### Datu Eksports
+- 📤 CSV eksports
+- 📤 JSON eksports
+- 🔍 Filtrēšana
+
+### Admin Panel
+- 👥 Lietotāju pārvaldība
+- 🔑 Admin tiesības
+- 📊 Sistēmas statistika
+
+---
+
+## 🚀 Instalācija
+
+### Priekšnosacījumi
+```
+PHP >= 8.1
+Composer
+Node.js >= 16
+MySQL >= 5.7
+```
+
+### Soļi
 
 ```bash
+# 1. Klonē projektu
 git clone https://github.com/23DP2ASalk/my_website.git
 cd my_website
-```
 
-### 2. Install PHP dependencies
-
-```bash
+# 2. Instalē
 composer install
-```
-
-### 3. Install JavaScript dependencies
-
-```bash
 npm install
-```
 
-### 4. Configure environment
-
-Copy the example environment file and configure your database:
-
-```bash
+# 3. Konfigurē
 cp .env.example .env
-```
+# Rediģē .env ar DB credentials
 
-Edit `.env` and set your database credentials:
-
-```
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=your_database_name
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-### 5. Generate application key
-
-```bash
+# 4. Setup
 php artisan key:generate
-```
-
-### 6. Run migrations
-
-```bash
 php artisan migrate
+
+# 5. Admin lietotājs
+php artisan tinker
 ```
 
-### 7. Build assets
-
-For development:
-```bash
-npm run dev
+```php
+$user = new \App\Models\User();
+$user->name = 'Admin';
+$user->email = 'admin@admin.com';
+$user->password = bcrypt('admin123');
+$user->is_admin = true;
+$user->save();
+exit
 ```
 
-For production:
 ```bash
+# 6. Build & Run
 npm run build
-```
-
-### 8. Start the application
-
-```bash
 php artisan serve
 ```
 
-The application will be available at `http://localhost:8000`
+**URL:** http://localhost:8000  
+**Login:** admin@admin.com / admin123
 
-## Development
+---
 
-### Running in development mode
+## 📖 Lietošana
 
-Terminal 1 - Laravel server:
-```bash
-php artisan serve
+### Pierakstīšanās
+1. Atver /login
+2. Ievadi email/password
+3. Klikšķini Login
+
+### Statistikas Pievienošana
+1. Dashboard → "Pievienot Statistiku"
+2. Izvēlies sporta veidu
+3. Aizpildi datus
+4. Saglabā
+
+### Analīze
+1. Izvēlne → "Datu analīze"
+2. Skaties grafikus
+3. Analizē tendences
+
+### Eksports
+1. Izvēlne → "Datu eksports"
+2. Izvēlies formātu (CSV/JSON)
+3. Filtrē (ja vajag)
+4. Lejupielādē
+
+---
+
+## 🔐 Admin Panel
+
+**URL:** /admin
+
+### Funkcijas
+- Lietotāju saraksts
+- Piešķirt/noņemt admin
+- Dzēst lietotājus
+- Sistēmas statistika
+
+### Piekļuve
+Tikai lietotājiem ar `is_admin = true`
+
+---
+
+## 🛣️ API Endpoints
+
+### Statistikas Routes
+```
+GET    /statistics          - Visi ieraksti
+GET    /statistics/create   - Create forma
+POST   /statistics          - Izveidot jaunu
+GET    /statistics/{id}/edit - Edit forma
+PUT    /statistics/{id}     - Atjaunināt
+DELETE /statistics/{id}     - Dzēst
 ```
 
-Terminal 2 - Vite dev server:
-```bash
-npm run dev
+### Analīze
+```
+GET /analytics - Analytics dashboard
 ```
 
-### Running tests
-
-```bash
-php artisan test
+### Eksports
+```
+GET /exports     - Export lapa
+GET /exports/csv - Lejupielādēt CSV
+GET /exports/json - Lejupielādēt JSON
 ```
 
-## Tech Stack
-
-- Laravel 10.x - PHP Framework
-- Vue 3 - JavaScript Framework
-- Vuetify - Material Design Component Framework
-- Inertia.js - Modern monolith stack
-- Vite - Frontend build tool
-
-## Project Structure
-
+### Admin
 ```
-.
-├── app/                # Application code
-│   ├── Http/          # Controllers, Middleware
-│   └── Models/        # Eloquent models
-├── bootstrap/         # Framework bootstrap
-├── config/            # Configuration files
-├── database/          # Migrations, seeds, factories
-├── public/            # Public assets
-├── resources/         # Views, JavaScript, CSS
-│   ├── js/           # Vue components
-│   └── views/        # Blade templates
-├── routes/            # Route definitions
-├── storage/           # Logs, cache, uploads
-├── tests/             # Automated tests
-└── vuetify/           # Vuetify configuration
+GET  /admin             - Admin dashboard
+GET  /admin/users       - Lietotāju saraksts
+POST /admin/users/{id}/toggle-admin
+DELETE /admin/users/{id}
 ```
 
-## Database
+---
 
-Run migrations:
-```bash
-php artisan migrate
+## 🗄️ Datubāze
+
+### Users
+```sql
+- id
+- name
+- email (unique)
+- password (bcrypt)
+- is_admin (boolean)
+- role (user/admin)
+- created_at
 ```
 
-Rollback migrations:
-```bash
-php artisan migrate:rollback
+### Statistics
+```sql
+- id
+- user_id (foreign key)
+- sport_type (Basketball/Football/Volleyball)
+- game_date
+- minutes_played
+
+Basketball:
+- points, assists, rebounds, steals, blocks
+
+Football:
+- goals, assists_football, shots, passes, tackles
+
+Volleyball:
+- spikes, blocks_volleyball, serves, digs, aces
+
+- notes (text)
+- created_at, updated_at
 ```
 
-Fresh migration (drop all tables):
-```bash
-php artisan migrate:fresh
-```
+---
 
-## Deployment
+## 🔧 Problēmu Risināšana
 
-### 1. Install dependencies
-
-```bash
-composer install --optimize-autoloader --no-dev
-npm install
-npm run build
-```
-
-### 2. Configure environment
-
-Set up your production `.env` file with proper settings:
-
-```
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://your-domain.com
-```
-
-### 3. Optimize
-
-```bash
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-```
-
-### 4. Set permissions
-
-```bash
-chmod -R 755 storage
-chmod -R 755 bootstrap/cache
-```
-
-## Troubleshooting
-
-### Clear cache
-
-```bash
-php artisan cache:clear
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-```
-
-### Regenerate autoloader
-
+### "Class not found"
 ```bash
 composer dump-autoload
 ```
 
-### Fix storage permissions
-
+### "CSRF token mismatch"
 ```bash
-chmod -R 775 storage
-chmod -R 775 bootstrap/cache
+php artisan cache:clear
+php artisan config:clear
 ```
 
-## Contributing
+### "Mix manifest not found"
+```bash
+npm run build
+```
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+### "Tukša lapa"
+```bash
+# Pārbaudi Console (F12)
+# Rebuild assets
+npm run build
+```
 
-## License
+### "403 Unauthorized" admin panelī
+```php
+// Tinker:
+$user = User::find(1);
+$user->is_admin = true;
+$user->save();
+```
 
-This project is open-source software.
+---
+
+## 📁 Failu Struktūra
+
+```
+my_website/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Admin/AdminController.php
+│   │   ├── StatisticController.php
+│   │   ├── AnalyticsController.php
+│   │   └── ExportController.php
+│   ├── Middleware/IsAdmin.php
+│   └── Models/
+│       ├── User.php
+│       └── Statistic.php
+├── database/migrations/
+├── resources/
+│   ├── js/
+│   │   ├── app.js
+│   │   └── components/
+│   │       ├── Dashboard.vue
+│   │       ├── StatisticsIndex.vue
+│   │       ├── StatisticsCreate.vue
+│   │       ├── StatisticsEdit.vue
+│   │       ├── Analytics.vue
+│   │       ├── Exports.vue
+│   │       ├── AdminDashboard.vue
+│   │       └── AdminUsers.vue
+│   └── views/
+│       ├── welcome.blade.php
+│       ├── login.blade.php
+│       ├── dashboard.blade.php
+│       ├── statistics/
+│       ├── analytics/
+│       ├── exports/
+│       └── admin/
+├── routes/web.php
+└── .env
+```
+
+---
+
+## 👨‍💻 Autori
+
+- **Andrejs Kristens Saļkovs** - 23DP2ASalk
+- **Projekts:** Stats Tracker
+- **Datums:** 2026
+
+---
+
+## 📄 Licence
+
+Šis projekts ir izveidots izglītības nolūkiem.
+
+---
+
+## 🔗 Saites
+
+- **GitHub:** https://github.com/23DP2ASalk/my_website
+- **Laravel Docs:** https://laravel.com/docs
+- **Vue Docs:** https://vuejs.org
+- **Vuetify Docs:** https://vuetifyjs.com
+
+---
+
+**Paldies, ka izmanto Stats Tracker! 🎉**
