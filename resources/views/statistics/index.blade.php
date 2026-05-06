@@ -10,8 +10,8 @@
 <body>
     <div id="app">
         <statistics-index
-            statistics="{{ json_encode($statistics) }}"
-            filters="{{ json_encode($filters) }}"
+            :statistics='@json($statistics)'
+            :filters='@json($filters)'
             user-name="{{ Auth::user()->name }}"
             user-role="{{ Auth::user()->role }}"
             csrf-token="{{ csrf_token() }}"

@@ -71,9 +71,8 @@
           </template>
           <v-list-item prepend-icon="mdi-chart-line" title="Statistikas ievadīšana" href="/statistics/create"></v-list-item>
           <v-list-item prepend-icon="mdi-view-list" title="Skatīt statistikas" href="/statistics"></v-list-item>
-          <v-list-item prepend-icon="mdi-chart-bar" title="Datu analīze"></v-list-item>
-          <v-list-item prepend-icon="mdi-file-document" title="Atskaites"></v-list-item>
-          <v-list-item prepend-icon="mdi-download" title="Datu eksports"></v-list-item>
+          <v-list-item prepend-icon="mdi-chart-bar" title="Datu analīze" href="/analytics"></v-list-item>
+          <v-list-item prepend-icon="mdi-download" title="Datu eksports" href="/exports"></v-list-item>
         </v-list-group>
 
         <v-list-item prepend-icon="mdi-email" title="Kontakti"></v-list-item>

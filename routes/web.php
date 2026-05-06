@@ -1,59 +1,135 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatisticController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\SettingController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-// Public routes
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return redirect('/login');
 });
 
-// Authentication
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+/*
+|--------------------------------------------------------------------------
+| Login & Register Routes
+|--------------------------------------------------------------------------
+*/
 
-// Protected routes (requires authentication)
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::post('/login', function (Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect()->intended('/dashboard');
+    }
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ])->onlyInput('email');
+});
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+
+Route::post('/register', function (Request $request) {
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ]);
+
+    $user = \App\Models\User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => bcrypt($validated['password']),
+        'role' => 'user',
+        'is_admin' => false,
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Logout Route
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->middleware('auth')->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard & Profile Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    
-    // Profile
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    
-    // ← PIEVIENO ŠEIT STATISTICS ROUTES
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Statistics Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
     // Statistics CRUD
     Route::resource('statistics', StatisticController::class);
     Route::get('statistics-summary', [StatisticController::class, 'summary'])->name('statistics.summary');
+    
+    // Analytics
+    Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    
+    // Exports
+    Route::get('exports', [ExportController::class, 'index'])->name('exports.index');
+    Route::get('exports/csv', [ExportController::class, 'exportCSV'])->name('exports.csv');
+    Route::get('exports/json', [ExportController::class, 'exportJSON'])->name('exports.json');
 });
 
-/**
- * Admin Routes
- * 
- * All routes are protected by 'auth' and 'admin' middleware
- */
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    
-    // Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'is.admin'])->prefix('admin')->group(function () {
+    // Admin Dashboard
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     
     // User Management
-    Route::resource('users', UserController::class);
-    Route::post('users/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('users.toggle-admin');
-    
-    // Settings
-    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-    Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
-    Route::post('settings/create', [SettingController::class, 'store'])->name('settings.store');
-    Route::delete('settings/{setting}', [SettingController::class, 'destroy'])->name('settings.destroy');
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::post('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('admin.users.toggle');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
 });

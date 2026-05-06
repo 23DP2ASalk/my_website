@@ -10,15 +10,17 @@ class IsAdmin
 {
     /**
      * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check()) {
-            return redirect()->route('login')->with('error', 'Please login to access admin panel.');
+            return redirect()->route('login');
         }
 
         if (!auth()->user()->is_admin) {
-            abort(403, 'Unauthorized access. Admin privileges required.');
+            abort(403, 'Unauthorized - Admin access only');
         }
 
         return $next($request);

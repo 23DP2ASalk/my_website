@@ -12,6 +12,7 @@ class StatisticController extends Controller
         $query = Statistic::where('user_id', auth()->id())
             ->orderBy('game_date', 'desc');
 
+        // Filters...
         if ($request->sport_type && $request->sport_type !== 'all') {
             $query->where('sport_type', $request->sport_type);
         }
@@ -23,7 +24,7 @@ class StatisticController extends Controller
         if ($request->search) {
             $query->where(function($q) use ($request) {
                 $q->where('notes', 'like', "%{$request->search}%")
-                  ->orWhere('sport_type', 'like', "%{$request->search}%");
+                ->orWhere('sport_type', 'like', "%{$request->search}%");
             });
         }
 
