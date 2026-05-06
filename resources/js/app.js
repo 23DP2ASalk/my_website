@@ -1,14 +1,43 @@
-import './bootstrap';
-import { createApp } from 'vue';
-import vuetify from './plugins/vuetify';
+import { createApp } from 'vue'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import 'vuetify/styles'
+import '@mdi/font/css/materialdesignicons.css'
 
-// Import components
-import Dashboard from './components/Dashboard.vue';
+import Dashboard from './components/Dashboard.vue'
+import StatisticsIndex from './components/StatisticsIndex.vue'
+import StatisticsCreate from './components/StatisticsCreate.vue'
 
-const app = createApp({});
+const vuetify = createVuetify({
+  components,
+  directives,
+  theme: {
+    defaultTheme: localStorage.getItem('theme') || 'light',
+    themes: {
+      light: {
+        colors: {
+          primary: '#2563eb',
+          secondary: '#1e40af',
+          accent: '#3b82f6',
+        }
+      },
+      dark: {
+        colors: {
+          primary: '#2563eb',
+          secondary: '#1e40af',
+          accent: '#3b82f6',
+        }
+      }
+    }
+  }
+})
 
-app.component('dashboard', Dashboard);
+const app = createApp({})
 
-app.use(vuetify);
+app.component('dashboard', Dashboard)
+app.component('statistics-index', StatisticsIndex)
+app.component('statistics-create', StatisticsCreate)
 
-app.mount('#app');
+app.use(vuetify)
+app.mount('#app')
