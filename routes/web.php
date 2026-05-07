@@ -54,14 +54,15 @@ Route::post('/register', function (Request $request) {
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'role' => ['required', 'in:user,admin'],
     ]);
 
     $user = \App\Models\User::create([
         'name' => $validated['name'],
         'email' => $validated['email'],
         'password' => bcrypt($validated['password']),
-        'role' => 'user',
-        'is_admin' => false,
+        'role' => $validated['role'],
+        'is_admin' => $validated['role'] === 'admin',
     ]);
 
     Auth::login($user);
