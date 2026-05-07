@@ -17,6 +17,7 @@ Pilna projekta dokumentācija
 9. [Problēmu Risināšana](#problēmu-risināšana)
 
 ---
+<a id="projekta-apraksts"></a>
 
 ## 🎯 Projekta Apraksts
 
@@ -28,6 +29,7 @@ Pilna projekta dokumentācija
 - 🏐 Volejbols
 
 ---
+<a id="tehnoloģijas"></a>
 
 ## 💻 Tehnoloģijas
 
@@ -38,6 +40,7 @@ Pilna projekta dokumentācija
 - **Vite** - Build tool
 
 ---
+<a id="funkcionalitāte"></a>
 
 ## ⚡ Funkcionalitāte
 
@@ -65,6 +68,7 @@ Pilna projekta dokumentācija
 - 📊 Sistēmas statistika
 
 ---
+<a id="instalācija"></a>
 
 ## 🚀 Instalācija
 
@@ -119,6 +123,7 @@ php artisan serve
 **Login:** admin@admin.com / admin123
 
 ---
+<a id="lietošana"></a>
 
 ## 📖 Lietošana
 
@@ -145,6 +150,7 @@ php artisan serve
 4. Lejupielādē
 
 ---
+<a id="admin-panel"></a>
 
 ## 🔐 Admin Panel
 
@@ -160,6 +166,7 @@ php artisan serve
 Tikai lietotājiem ar `is_admin = true`
 
 ---
+<a id="api-endpoints"></a>
 
 ## 🛣️ API Endpoints
 
@@ -194,6 +201,7 @@ DELETE /admin/users/{id}
 ```
 
 ---
+<a id="datubāze"></a>
 
 ## 🗄️ Datubāze
 
@@ -230,6 +238,7 @@ Volleyball:
 ```
 
 ---
+<a id="problēmu-risināšana"></a>
 
 ## 🔧 Problēmu Risināšana
 
