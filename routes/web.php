@@ -93,6 +93,19 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/news', function (Request $request) {
+        $query = $request->query('q', 'sports');
+        $apiKey = env('NEWS_API_KEY');
+        $response = \Illuminate\Support\Facades\Http::get('https://newsapi.org/v2/everything', [
+            'q' => $query,
+            'apiKey' => $apiKey,
+            'language' => 'en',
+            'pageSize' => 12,
+            'sortBy' => 'publishedAt',
+        ]);
+        return response()->json($response->json(), $response->status());
+    })->name('news.proxy');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -1,5 +1,4 @@
-const API_KEY = '993171fccd68402289dfb60b73b35149';
-const API_URL = 'https://newsapi.org/v2/everything';
+const API_URL = '/news';
 
 // Load search history from localStorage
 function loadHistory() {
@@ -69,7 +68,7 @@ async function searchNews() {
     document.getElementById('news-container').innerHTML = '';
     
     try {
-        const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}&apiKey=${API_KEY}&language=en&pageSize=12&sortBy=publishedAt`);
+        const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}`);
         
         if (!response.ok) {
             throw new Error('Neizdevās ielādēt ziņas');
