@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/news', function (Request $request) {
         $query = $request->query('q', 'sports');
-        $apiKey = env('NEWS_API_KEY');
+        $apiKey = config('services.newsapi.key');
         $response = \Illuminate\Support\Facades\Http::get('https://newsapi.org/v2/everything', [
             'q' => $query,
             'apiKey' => $apiKey,
