@@ -102,8 +102,8 @@ function displayNews(articles) {
             day: 'numeric'
         });
         
-        const imageHtml = article.urlToImage 
-            ? `<img src="${article.urlToImage}" alt="${article.title}" class="news-image" onerror="this.parentElement.innerHTML='<div class=\\'news-no-image\\'>📰</div>'">`
+        const imageHtml = article.image
+            ? `<img src="${article.image}" alt="${article.title}" class="news-image" onerror="this.parentElement.innerHTML='<div class=\\'news-no-image\\'>📰</div>'">`
             : '<div class="news-no-image">📰</div>';
         
         return `
