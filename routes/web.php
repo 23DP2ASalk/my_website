@@ -89,22 +89,22 @@ Route::post('/logout', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
+Route::get('/news', function (Request $request) {
+    $query = $request->query('q', 'sports');
+    $apiKey = config('services.newsapi.key');
+    $response = \Illuminate\Support\Facades\Http::get('https://gnews.io/api/v4/search', [
+        'q' => $query,
+        'token' => $apiKey,
+        'lang' => 'en',
+        'max' => 12,
+    ]);
+    return response()->json($response->json(), $response->status());
+})->name('news.proxy');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    Route::get('/news', function (Request $request) {
-        $query = $request->query('q', 'sports');
-        $apiKey = config('services.newsapi.key');
-        $response = \Illuminate\Support\Facades\Http::get('https://gnews.io/api/v4/search', [
-            'q' => $query,
-            'token' => $apiKey,
-            'lang' => 'en',
-            'max' => 12,
-        ]);
-        return response()->json($response->json(), $response->status());
-    })->name('news.proxy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
