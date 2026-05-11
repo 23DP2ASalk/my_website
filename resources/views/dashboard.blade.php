@@ -13,8 +13,7 @@
             user-name="{{ Auth::user()->name }}"
             user-role="{{ Auth::user()->role }}"
             logout-route="{{ route('logout') }}"
-            news-api-key="993171fccd68402289dfb60b73b35149"
-        ></dashboard>
+    ></dashboard>
     </div>
 </body>
 </html>

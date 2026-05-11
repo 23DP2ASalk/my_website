@@ -306,7 +306,7 @@
           >
             <v-card elevation="4" hover class="h-100 d-flex flex-column">
               <v-img
-                :src="article.urlToImage || 'https://via.placeholder.com/400x200?text=No+Image'"
+                :src="article.image || 'https://via.placeholder.com/400x200?text=No+Image'"
                 height="200"
                 cover
               >
@@ -456,7 +456,6 @@ const props = defineProps({
   userName: String,
   userRole: String,
   logoutRoute: String,
-  newsApiKey: String,
 });
 
 // Data
@@ -580,7 +579,7 @@ const searchNews = async () => {
 
   try {
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=${encodeURIComponent(newsSearchQuery.value)}&apiKey=${props.newsApiKey}&language=en&pageSize=12&sortBy=publishedAt`
+      `/news?q=${encodeURIComponent(newsSearchQuery.value)}`
     );
 
     if (!response.ok) {
